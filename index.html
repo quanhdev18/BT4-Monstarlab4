@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BT3-Monstarlab</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="form-container">
+      <h1>Đây là Form Register</h1>
+      <form id="registerForm">
+        <label>Nhập tên người dùng:</label>
+        <input type="text" id="username" placeholder="Họ và tên" />
+        <div class="error" id="usernameError"></div>
+
+        <label> Nhập Email:</label>
+        <input type="text" id="email" placeholder="Email" />
+        <div class="error" id="emailError"></div>
+
+        <label>Nhập mật khẩu:</label>
+        <input type="password" id="password" placeholder="Mật khẩu" />
+        <div class="error" id="passwordError"></div>
+
+        <label>Xác nhận mật khẩu:</label>
+        <input type="password" id="confirmPassword" placeholder="Mật khẩu" />
+        <div class="error" id="confirmPasswordError"></div>
+        <div class="button-container">
+          <button type="submit">Đăng ký</button>
+        </div>
+      </form>
+    </div>
+    <script src="/src/main.js"></script>
+  </body>
+</html>
