@@ -25,85 +25,87 @@ const MESSAGES = {
   ALERT_WARNING: 'Cảnh báo',
 };
 
+const errors = {
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+};
+
 function getTrimmedValue(element) {
   return element.value.trim();
 }
 
+function setFieldError(field, errorElement, message) {
+  errors[field] = message;
+  errorElement.textContent = message;
+}
+
 function validateUsername() {
-  let valid = true;
   const usernameValue = getTrimmedValue(username);
   if (!usernameValue) {
-    usernameError.textContent = MESSAGES.REQUIRED;
-    valid = false;
+    setFieldError('username', usernameError, MESSAGES.REQUIRED);
   } else if (specialCharsRegex.test(usernameValue)) {
-    usernameError.textContent = MESSAGES.USERNAME_SPECIAL_CHARS;
-    valid = false;
+    setFieldError('username', usernameError, MESSAGES.USERNAME_SPECIAL_CHARS);
   } else {
-    usernameError.textContent = '';
+    setFieldError('username', usernameError, '');
   }
-  return valid;
 }
 
 function validateEmail() {
-  let valid = true;
   const emailValue = getTrimmedValue(email);
   if (!emailValue) {
-    emailError.textContent = MESSAGES.REQUIRED;
-    valid = false;
+    setFieldError('email', emailError, MESSAGES.REQUIRED);
   } else if (!emailRegex.test(emailValue)) {
-    emailError.textContent = MESSAGES.EMAIL_INVALID;
-    valid = false;
+    setFieldError('email', emailError, MESSAGES.EMAIL_INVALID);
   } else {
-    emailError.textContent = '';
+    setFieldError('email', emailError, '');
   }
-  return valid;
 }
 
 function validatePassword() {
-  let valid = true;
   const passwordValue = getTrimmedValue(password);
   if (!passwordValue) {
-    passwordError.textContent = MESSAGES.REQUIRED;
-    valid = false;
+    setFieldError('password', passwordError, MESSAGES.REQUIRED);
   } else if (!passwordRegex.test(passwordValue)) {
-    passwordError.textContent = MESSAGES.PASSWORD_INVALID;
-    valid = false;
+    setFieldError('password', passwordError, MESSAGES.PASSWORD_INVALID);
   } else {
-    passwordError.textContent = '';
+    setFieldError('password', passwordError, '');
   }
-  return valid;
 }
 
 function validateConfirmPassword() {
-  let valid = true;
   const confirmPasswordValue = getTrimmedValue(confirmPassword);
   const passwordValue = getTrimmedValue(password);
   if (!confirmPasswordValue) {
-    confirmPasswordError.textContent = MESSAGES.REQUIRED;
-    valid = false;
+    setFieldError('confirmPassword', confirmPasswordError, MESSAGES.REQUIRED);
   } else if (confirmPasswordValue !== passwordValue) {
-    confirmPasswordError.textContent = MESSAGES.CONFIRM_PASSWORD_MISMATCH;
-    valid = false;
+    setFieldError('confirmPassword', confirmPasswordError, MESSAGES.CONFIRM_PASSWORD_MISMATCH);
   } else {
-    confirmPasswordError.textContent = '';
+    setFieldError('confirmPassword', confirmPasswordError, '');
   }
-  return valid;
 }
 
 function validateForm() {
-  const isUsernameValid = validateUsername();
-  const isEmailValid = validateEmail();
-  const isPasswordValid = validatePassword();
-  const isConfirmPasswordValid = validateConfirmPassword();
-  return isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid;
+  validateUsername();
+  validateEmail();
+  validatePassword();
+  validateConfirmPassword();
+
+  for (const field in errors) {
+    if (errors[field]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 function resetData() {
   form.reset();
-  usernameError.textContent = '';
-  emailError.textContent = '';
-  passwordError.textContent = '';
-  confirmPasswordError.textContent = '';
+  setFieldError('username', usernameError, '');
+  setFieldError('email', emailError, '');
+  setFieldError('password', passwordError, '');
+  setFieldError('confirmPassword', confirmPasswordError, '');
 }
 
 form.addEventListener('submit', function (e) {
@@ -115,7 +117,8 @@ form.addEventListener('submit', function (e) {
       email: getTrimmedValue(email),
       password: getTrimmedValue(password),
     };
-    let users = JSON.parse(localStorage.getItem('registeredUsersArr')) || [];
+    const users = JSON.parse(localStorage.getItem('registeredUsersArr')) || [];
+    // dùng const ở đây được không em? Var, let, const khác gì nhau? =>> dùng const đưuọc. Var,let, const khác nhau ở phép gán lại giá trị, phạm vi
     users.push(userData);
     localStorage.setItem('registeredUsersArr', JSON.stringify(users));
     alert(MESSAGES.REGISTER_SUCCESS);
